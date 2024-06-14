@@ -2,9 +2,11 @@ import os
 import sys
 import optparse
 import random
-from ultralytics import YOLOv10
 
 
+from capture import Capture 
+from detect import Detect
+from trafficlightcontrol import TrafficLightControl
 import traci._lane
 
 # we need to import python modules from the $SUMO_HOME/tools directory
@@ -20,65 +22,65 @@ import traci  # noqa
 import time
 from PIL import ImageGrab
 
-def capture_screen():
-    """Chụp màn hình từ 3 vị trí khác nhau"""
-    # Chụp màn hình tại vị trí 1 (ví dụ: vùng bên trái)
-    screenshot = ImageGrab.grab(bbox=(400, 130, 1450, 980))  # Tọa độ (0, 0) là góc trên bên trái
-    return screenshot
-def detect_objects(model, screenshot):
-    # Tính toán trọng số dựa trên số lượng vật thể phát hiện được từ mô hình YOLOv10.
-    
-    # Nhận diện vật thể từ 3 vị trí khác nhau
-    results = model(screenshot, conf=0.3, iou=0.5, verbose=False)
-    class_detections_values = []
-    for k, v in model.names.items():
-        class_detections_values.append(results[0].boxes.cls.tolist().count(k))
-    # create dictionary of objects detected per class
-    classes_detected = dict(zip(model.names.values(), class_detections_values))
-    
-    weight = (classes_detected['Bus']*3 + classes_detected['Car'] + classes_detected['Motor']*0.75 + classes_detected['Truck']*1.5)
-    return weight
-def create_phases_3(time_1, time_2):
-    # Tạo chu kỳ đèn giao thông mới của ngã 3
-    phases = [
-        traci.trafficlight.Phase(time_1, "GGGGGgrr"),  # Green for first 3 lanes
-        traci.trafficlight.Phase(5, "Gyyyyyrr"),  # Yellow for first 3 lanes
-        traci.trafficlight.Phase(time_2, "GrrrrrGG"),  # Green for next 3 lanes
-        traci.trafficlight.Phase(5, "Grrrrryy")    # Yellow for next 3 lanes
-    ]
-    return phases
-def set_traffic_light_cycle(tls_id, phases):
-    """Thiết lập chu kỳ đèn giao thông mới cho nút giao được xác định bởi tls_id."""
-    # Thiết lập kế hoạch đèn giao thông (program)
-    program = traci.trafficlight.Logic("custom_program", 0, 1, phases)
-    traci.trafficlight.setProgramLogic(tls_id, program)
 
 def run():
     """execute the TraCI control loop"""
     step = 0
     red_light_time = None
-    # Load mô hình YOLOv5
-    model = YOLOv10('F:\\Project\\Thesis\\Thesis\\ModelVehicleDetect\\best.pt')
-
+    dt = Detect()
+    cp = Capture()
+    tlc = TrafficLightControl("J28")
     while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()
-        print(traci.trafficlight.getPhase("J28"))
+        total_time = 0
         if red_light_time == 2:
+            print("Chup hinh doi pha")
             # phân loại mật độ giao thông
-            screen = capture_screen()
-            weight = detect_objects(model, screen)
-            phases = create_phases_3()
-            print(phases)
+            screen = cp.capture_screen()
+            result = dt.predict(screen)
+            weight = dt.calculate_weight(result)
+            if weight == 0:
+                weight = 1
             if(weight < 12):
+                total_time = 32 *2
+                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_result = dt.predict( horizontal_road_image)
+                vertical_result = dt.predict( vertical_road_image)
+                horizontal_weight = dt.calculate_weight(horizontal_result)
+                vertical_weight = dt.calculate_weight(vertical_result)
                 
-                set_traffic_light_cycle('J28', phases)
+                time1 = round((horizontal_weight /weight) * total_time)
+                time2 = round((vertical_weight /weight) * total_time)
+                phases = tlc.create_phases_3(time1, time2)
+                tlc.set_traffic_light_cycle( phases)
+                print("vang", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
                 print('vang')
             elif (weight <30):
-                set_traffic_light_cycle('J28', phases) 
-                print('dong')
+                total_time = 45 *2
+                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_result = dt.predict( horizontal_road_image)
+                vertical_result = dt.predict( vertical_road_image)
+                horizontal_weight = dt.calculate_weight(horizontal_result)
+                vertical_weight = dt.calculate_weight(vertical_result)
+                time1 = round((horizontal_weight /weight) * total_time)
+                time2 = round((vertical_weight /weight) * total_time)
+                phases = tlc.create_phases_3(time1, time2)
+                tlc.set_traffic_light_cycle( phases)
+                print("it", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
+                print('it')
             else:
-                set_traffic_light_cycle('J28', phases)
-                print('vang')
+                total_time = 60 *2
+                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_result = dt.predict( horizontal_road_image)
+                vertical_result = dt.predict( vertical_road_image)
+                horizontal_weight = dt.calculate_weight(horizontal_result)
+                vertical_weight = dt.calculate_weight(vertical_result)
+                time1 = round((horizontal_weight /weight) * total_time)
+                time2 = round((vertical_weight /weight) * total_time)
+                phases = tlc.create_phases_3(time1, time2)
+                tlc.set_traffic_light_cycle( phases)
+                print("dong", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
+                print('dong')
         
         if traci.trafficlight.getPhase("J28") == 0:
             # Nếu đèn giao thông là đèn đỏ
