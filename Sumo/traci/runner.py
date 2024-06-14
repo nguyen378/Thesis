@@ -118,5 +118,5 @@ if __name__ == "__main__":
     else:
         sumoBinary = checkBinary('sumo-gui')
         
-    traci.start([sumoBinary, "-c", "F:\Project\Thesis\Thesis\Sumo/traci/new/new.sumocfg"])
+    traci.start([sumoBinary, "-c", "D:\Project\Github\Thesis\Sumo\\traci\\new\\new.sumocfg"])
     run()
