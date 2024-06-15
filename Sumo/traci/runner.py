@@ -43,54 +43,30 @@ def run():
                 weight = 1
             if(weight < 12):
                 total_time = 32 *2
-                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
-                horizontal_result = dt.predict( horizontal_road_image)
-                vertical_result = dt.predict( vertical_road_image)
-                horizontal_weight = dt.calculate_weight(horizontal_result)
-                vertical_weight = dt.calculate_weight(vertical_result)
-                
-                time1 = round((horizontal_weight /weight) * total_time)
-                time2 = round((vertical_weight /weight) * total_time)
-                phases = tlc.create_phases_3(time1, time2)
-                tlc.set_traffic_light_cycle( phases)
-                print("vang", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
                 print('vang')
             elif (weight <30):
                 total_time = 45 *2
-                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
-                horizontal_result = dt.predict( horizontal_road_image)
-                vertical_result = dt.predict( vertical_road_image)
-                horizontal_weight = dt.calculate_weight(horizontal_result)
-                vertical_weight = dt.calculate_weight(vertical_result)
-                time1 = round((horizontal_weight /weight) * total_time)
-                time2 = round((vertical_weight /weight) * total_time)
-                phases = tlc.create_phases_3(time1, time2)
-                tlc.set_traffic_light_cycle( phases)
-                print("it", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
                 print('it')
             else:
                 total_time = 60 *2
-                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
-                horizontal_result = dt.predict( horizontal_road_image)
-                vertical_result = dt.predict( vertical_road_image)
-                horizontal_weight = dt.calculate_weight(horizontal_result)
-                vertical_weight = dt.calculate_weight(vertical_result)
-                time1 = round((horizontal_weight /weight) * total_time)
-                time2 = round((vertical_weight /weight) * total_time)
-                phases = tlc.create_phases_3(time1, time2)
-                tlc.set_traffic_light_cycle( phases)
-                print("dong", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
                 print('dong')
+
+        horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+        horizontal_result = dt.predict( horizontal_road_image)
+        vertical_result = dt.predict( vertical_road_image)
+        horizontal_weight = dt.calculate_weight(horizontal_result)
+        vertical_weight = dt.calculate_weight(vertical_result)
+        
+        time1 = round((horizontal_weight /weight) * total_time)
+        time2 = round((vertical_weight /weight) * total_time)
+        phases = tlc.create_phases_3(time1, time2)
+        tlc.set_traffic_light_cycle( phases)
+        print("ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
         
         if traci.trafficlight.getPhase("J28") == 3:
             # Nếu đèn giao thông là đèn đỏ
-            if red_light_time is None:
+            if red_light_time is None or red_light_time > 2:
                 print(traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime())
-                # Nếu red_light_time chưa được thiết lập, thiết lập bằng thời gian của đèn đỏ
-                red_light_time = traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime()
-            elif red_light_time > 2:
-                print(traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime())
-                # Nếu red_light_time lớn hơn 2, cập nhật lại red_light_time
                 red_light_time = traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime()
         else:
             # Nếu đèn giao thông không phải là đèn đỏ, đặt lại red_light_time
