@@ -82,7 +82,7 @@ def run():
                 print("dong", "ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
                 print('dong')
         
-        if traci.trafficlight.getPhase("J28") == 0:
+        if traci.trafficlight.getPhase("J28") == 3:
             # Nếu đèn giao thông là đèn đỏ
             if red_light_time is None:
                 print(traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime())
