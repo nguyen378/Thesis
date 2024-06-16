@@ -125,9 +125,9 @@ class TrafficLightControl:
         """Thiết lập chu kỳ đèn giao thông mới cho nút giao được xác định bởi tls_id."""
         # Thiết lập kế hoạch đèn giao thông (program)
         program = traci.trafficlight.Logic("custom_program", 0, 0, phases)
-        print(program)
         traci.trafficlight.setProgramLogic(self.trafficlight_id, program)
         traci.trafficlight.setPhase(self.trafficlight_id, 0)
+
         
     def update_vehicle_counts(self, current_phase):
         """Update vehicle counts for the current green phase."""
@@ -136,7 +136,7 @@ class TrafficLightControl:
         # Retrieve the number of vehicles that have passed during the green phase
         lane_id = traci.trafficlight.getControlledLanes(self.trafficlight_id)[current_phase]
         vehicles = traci.lane.getLastStepVehicleNumber(lane_id)
-        print("Lane_id: ", lane_id, "Vehicles: ", vehicles)
+        print("Lane id: ", lane_id, "Vehicle: ", vehicles)
         self.phase_vehicle_counts[current_phase] += vehicles
 
     def calculate_y_crit(self, sat_flow):
