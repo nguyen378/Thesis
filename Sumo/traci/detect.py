@@ -3,7 +3,7 @@ from ultralytics import YOLOv10
 
 class Detect():
     def __init__(self):
-        self.model = YOLOv10('F:\\Project\\Thesis\\Thesis\\ModelVehicleDetect\\best.pt')
+        self.model = YOLOv10('ModelVehicleDetect\\best.pt')
         
     def predict(self, image):
         return self.model(image, conf=0.3, iou=0.5, verbose=False)
