@@ -51,17 +51,17 @@ def run():
                 total_time = 60 *2
                 print('dong')
 
-        horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
-        horizontal_result = dt.predict( horizontal_road_image)
-        vertical_result = dt.predict( vertical_road_image)
-        horizontal_weight = dt.calculate_weight(horizontal_result)
-        vertical_weight = dt.calculate_weight(vertical_result)
-        
-        time1 = round((horizontal_weight /weight) * total_time)
-        time2 = round((vertical_weight /weight) * total_time)
-        phases = tlc.create_phases_3(time1, time2)
-        tlc.set_traffic_light_cycle( phases)
-        print("ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
+            horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+            horizontal_result = dt.predict( horizontal_road_image)
+            vertical_result = dt.predict( vertical_road_image)
+            horizontal_weight = dt.calculate_weight(horizontal_result)
+            vertical_weight = dt.calculate_weight(vertical_result)
+            
+            time1 = round((horizontal_weight /weight) * total_time)
+            time2 = round((vertical_weight /weight) * total_time)
+            phases = tlc.create_phases_3(time1, time2)
+            tlc.set_traffic_light_cycle( phases)
+            print("ngang:", str(horizontal_weight) +' '+ str(time1), "doc", str(vertical_weight) +' '+ str(time2))
         
         if traci.trafficlight.getPhase("J28") == 3:
             # Nếu đèn giao thông là đèn đỏ
