@@ -5,6 +5,7 @@ class Detect():
     def __init__(self):
         self.model = YOLOv10('ModelVehicleDetect\\best.pt')
         
+        
     def predict(self, image):
         return self.model(image, conf=0.3, iou=0.5, verbose=False)
     
@@ -17,4 +18,4 @@ class Detect():
 
         weight = (classes_detected['Bus']*3 + classes_detected['Car'] + classes_detected['Motor']*0.75 + classes_detected['Truck']*1.5)
         return weight
-    
+        
