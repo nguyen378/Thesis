@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-06-16 16:52:47 by Eclipse SUMO netedit Version 1.20.0
+<!-- generated on 2024-06-17 00:51:12 by Eclipse SUMO netedit Version 1.20.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/neteditConfiguration.xsd">
 
     <input>
@@ -3471,15 +3471,15 @@
     </tlLogic>
     <tlLogic id="J28" type="static" programID="0" offset="0">
         <phase duration="32" state="GGGGGgrr"/>
-        <phase duration="3"  state="Gyyyyyrr"/>
-        <phase duration="32" state="GrrrrrGG"/>
-        <phase duration="3"  state="Grrrrryy"/>
+        <phase duration="3"  state="yyyyyyrr"/>
+        <phase duration="32" state="rrrrrrGG"/>
+        <phase duration="3"  state="GrrrrrGy"/>
     </tlLogic>
     <tlLogic id="J29" type="static" programID="0" offset="0">
         <phase duration="32" state="rrGGGGGg"/>
-        <phase duration="3"  state="rrGyyyyy"/>
+        <phase duration="3"  state="rrryyyyy"/>
         <phase duration="32" state="GGGrrrrr"/>
-        <phase duration="3"  state="yyGrrrrr"/>
+        <phase duration="3"  state="yyrrrrrr"/>
     </tlLogic>
     <tlLogic id="J3" type="static" programID="0" offset="0">
         <phase duration="32" state="GGgrrGGG"/>
@@ -3508,14 +3508,12 @@
         <phase duration="3"  state="yyyyyggrrrrrrrrrrrrrrryyyygggrrrrrrrrrrrrrrrrrrrrr"/>
         <phase duration="6"  state="rrrrrGGrrrrrrrrrrrrrrrrrrrGGGrrrrrrrrrrrrrrrrrrrrr"/>
         <phase duration="3"  state="rrrrryyrrrrrrrrrrrrrrrrrrryyyrrrrrrrrrrrrrrrrrrrrr"/>
-        <phase duration="1"  state="rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"/>
         <phase duration="32" state="rrrrrrrrrrrrrrGGGGggggrrrrrrrrrrrrrrrrrrrrrgggGGgg"/>
         <phase duration="3"  state="rrrrrrrrrrrrrryyyyggggrrrrrrrrrrrrrrrrrrrrrgggyygg"/>
         <phase duration="6"  state="rrrrrrrrrrrrrrrrrrGGggrrrrrrrrrrrrrrrrrrrrrgggrrGG"/>
         <phase duration="3"  state="rrrrrrrrrrrrrrrrrryyyyrrrrrrrrrrrrrrrrrrrrrgyyrryy"/>
         <phase duration="32" state="rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrGGGGGGGGrrrrrr"/>
         <phase duration="3"  state="rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryyyyyyyyrrrrrr"/>
-        <phase duration="1"  state="rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"/>
     </tlLogic>
     <tlLogic id="J43" type="static" programID="0" offset="0">
         <phase duration="32" state="rrrrrrrrrrrrGGGGggrrrrrrrrrrrrGGGGgg"/>
