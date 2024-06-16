@@ -15,6 +15,15 @@ class TrafficLightControl:
             traci.trafficlight.Phase(5, "Grrrrryy")    # Yellow for next 3 lanes
         ]
         return phases
+    def create_phases_4(self, time_1, time_2):
+        # Tạo chu kỳ đèn giao thông mới của ngã 4
+        phases = [
+            traci.trafficlight.Phase(time_1, "rrrrGGGgrrrrGGGg", 0, 0, [1,2,3]),  # Green for first 4 lanes
+            traci.trafficlight.Phase(5, "rrrryyyyrrrryyyy"),  # Yellow for first 4 lanes
+            traci.trafficlight.Phase(time_2, "GGGgrrrrGGGgrrrr"),  # Green for next 4 lanes
+            traci.trafficlight.Phase(5, "yyyyrrrryyyyrrrr")    # Yellow for next 4 lanes
+        ]
+        return phases
     def set_traffic_light_cycle(self, phases):
         """Thiết lập chu kỳ đèn giao thông mới cho nút giao được xác định bởi tls_id."""
         # Thiết lập kế hoạch đèn giao thông (program)

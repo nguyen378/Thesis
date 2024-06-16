@@ -81,74 +81,137 @@ def run():
     last_phase = -1
     dt = Detect()
     cp = Capture()
-    tlc = TrafficLightControl("J28")
+    lane = 4
     while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()
-        current_phase = traci.trafficlight.getPhase(tlc.trafficlight_id)
-        num_phases = get_traffic_light_phases(tlc.trafficlight_id)  # Lấy số lượng giai đoạn
+        if lane == 3:
+            #ngã 3
+            trafficlight_id = "J28"
+            tlc = TrafficLightControl(trafficlight_id)
+            current_phase = traci.trafficlight.getPhase(trafficlight_id)
+            if red_light_time == 2:
+                print("Chup hinh doi pha")
+                # phân loại mật độ giao thông
+                screen = cp.capture_screen()
+                result = dt.predict(screen)
+                weight = dt.calculate_weight(result)
+                if weight == 0:
+                    weight = 1
+                
+                if(weight < 12):
+                    c_min = 20  # Minimum cycle length in seconds
+                    c_max = 32*2  # Maximum cycle length in seconds
+                    print('vang')
+                elif (weight <30):
+                    c_min = 20
+                    c_max = 45*2 
+                    print('it')
+                else:
+                    c_min = 20
+                    c_max = 60*2 
+                    print('dong')
 
-        if current_phase != last_phase:
-            # Kiểm tra nếu current_phase là giai đoạn cuối cùng
-            if current_phase == num_phases - 1:
-                # Xử lý đặc biệt cho giai đoạn cuối cùng
-                pass  # Thêm logic xử lý ở đây nếu cần
-            else:
+                # Calculate y_crit using the updated vehicle counts
+                sat_flow = 1500  # Saturation flow rate in vehicles per hour | Default = 1800
+                y_crit_value = [tlc.calculate_y_crit(sat_flow)]  # Consider using dynamic saturation flow values
+                L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
+                total_time = websters(y_crit_value, L, c_min, c_max, num_phases = 4)
+                print("Total time: ",total_time, "y_crit_value: ", y_crit_value)
+                
+
+                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_result = dt.predict( horizontal_road_image)
+                vertical_result = dt.predict( vertical_road_image)
+                horizontal_weight = dt.calculate_weight(horizontal_result)
+                vertical_weight = dt.calculate_weight(vertical_result)
+                
+                time1 = round((horizontal_weight /weight) * total_time)
+                time2 = round((vertical_weight /weight) * total_time)
+                phases = tlc.create_phases_3(time1, time2)
+                tlc.set_traffic_light_cycle( phases)
+
+                print("Ngang:", str(horizontal_weight) +' time ngang:'+ str(time1), "Doc", str(vertical_weight) +' time doc:'+ str(time2))
+            
+            if traci.trafficlight.getPhase(trafficlight_id) == 3:
+                # Update vehicle counts for the current phase
                 tlc.update_vehicle_counts(current_phase)
-            last_phase = current_phase
-
-        if red_light_time == 2:
-            print("Chup hinh doi pha")
-            # phân loại mật độ giao thông
-            screen = cp.capture_screen()
-            result = dt.predict(screen)
-            weight = dt.calculate_weight(result)
-            num_ways = get_edge(tlc) / 2
-
-            if weight == 0:
-                weight = 1
-            
-            if(weight < 18 * num_ways/4):
-                c_min = 20  # Minimum cycle length in seconds
-                c_max = 15*num_ways  # Maximum cycle length in seconds
-                print('vang')
-            elif (weight < 39 * num_ways/4):
-                c_min = 40
-                c_max = 20*num_ways
-                print('it')
+                # Nếu đèn giao thông là đèn đỏ
+                if red_light_time is None or red_light_time > 2:
+                    print(traci.trafficlight.getNextSwitch(trafficlight_id) - traci.simulation.getTime())
+                    red_light_time = traci.trafficlight.getNextSwitch(trafficlight_id) - traci.simulation.getTime()
             else:
-                c_min = 60
-                c_max = 25*num_ways
-                print('dong')
+                # Nếu đèn giao thông không phải là đèn đỏ, đặt lại red_light_time
+                red_light_time = None
+                # Update vehicle counts for the current phase
+                tlc.update_vehicle_counts(current_phase)
+        elif lane == 4:
+            # ngã 4
+            trafficlight_id = "J15"
+            tlc = TrafficLightControl(trafficlight_id)
+            current_phase = traci.trafficlight.getPhase(trafficlight_id)
+            if red_light_time == 2:
+                print("Chup hinh doi pha")
+                # phân loại mật độ giao thông
+                screen = cp.capture_screen()
+                result = dt.predict(screen)
+                weight = dt.calculate_weight(result)
+                if weight == 0:
+                    weight = 1
+                if(weight < 12):
+                    c_min = 20  # Minimum cycle length in seconds
+                    c_max = 32*2  # Maximum cycle length in seconds
+                    print('vang')
+                elif (weight <30):
+                    c_min = 20
+                    c_max = 45*2 
+                    print('it')
+                else:
+                    c_min = 20
+                    c_max = 60*2 
+                    print('dong')
 
-            # Calculate y_crit using the updated vehicle counts
-            sat_flow = 1500  # Saturation flow rate in vehicles per hour | Default = 1800
-            y_crit_value = [tlc.calculate_y_crit(sat_flow)]  # Consider using dynamic saturation flow values
-            L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
-            total_time = websters(y_crit_value, L, c_min, c_max, get_traffic_light_phases(tlc.trafficlight_id))
-            print("Total time: ",total_time, "y_crit_value: ", y_crit_value)
+                # Calculate y_crit using the updated vehicle counts
+                sat_flow = 1500  # Saturation flow rate in vehicles per hour | Default = 1800
+                y_crit_value = [tlc.calculate_y_crit(sat_flow)]  # Consider using dynamic saturation flow values
+                L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
+                total_time = websters(y_crit_value, L, c_min, c_max, num_phases = 4)
+                print("Total time: ",total_time, "y_crit_value: ", y_crit_value)
+                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_result = dt.predict( horizontal_road_image)
+                vertical_result = dt.predict( vertical_road_image)
+                horizontal_weight = dt.calculate_weight(horizontal_result)
+                vertical_weight = dt.calculate_weight(vertical_result)
+                
+                time1 = round((horizontal_weight /weight) * total_time)
+                time2 = round((vertical_weight /weight) * total_time)
+                phases = tlc.create_phases_4(time1, time2)
+                tlc.set_traffic_light_cycle( phases)
 
-            horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
-            horizontal_result = dt.predict( horizontal_road_image)
-            vertical_result = dt.predict( vertical_road_image)
-            horizontal_weight = dt.calculate_weight(horizontal_result)
-            vertical_weight = dt.calculate_weight(vertical_result)
+                print("Ngang:", str(horizontal_weight) +' time ngang:'+ str(time1), "Doc", str(vertical_weight) +' time doc:'+ str(time2))
             
-            time1 = round((horizontal_weight /weight) * total_time)
-            time2 = round((vertical_weight /weight) * total_time)
-            phases = tlc.create_phases_3(time1, time2)
-            tlc.set_traffic_light_cycle( phases)
+            if traci.trafficlight.getPhase(trafficlight_id) == 3:
+                # Update vehicle counts for the current phase
+                tlc.update_vehicle_counts(current_phase)
+                # Nếu đèn giao thông là đèn đỏ
+                if red_light_time is None or red_light_time > 2:
+                    print(traci.trafficlight.getNextSwitch(trafficlight_id) - traci.simulation.getTime())
+                    red_light_time = traci.trafficlight.getNextSwitch(trafficlight_id) - traci.simulation.getTime()
+            else:
+                # Nếu đèn giao thông không phải là đèn đỏ, đặt lại red_light_time
+                red_light_time = None
+                # Update vehicle counts for the current phase
+                tlc.update_vehicle_counts(current_phase)
+        elif lane == 5:
+            # ngã 5
+            return
+        elif lane == 6:
+            #nga 6
+            return
+        elif lane == 7:
+            # nga 7
+            return     
+ 
 
-            print("Ngang:", str(horizontal_weight) +' time ngang:'+ str(time1), "Doc", str(vertical_weight) +' time doc:'+ str(time2))
-        
-        if traci.trafficlight.getPhase("J28") == 3:
-            # Nếu đèn giao thông là đèn đỏ
-            if red_light_time is None or red_light_time > 2:
-                print(traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime())
-                red_light_time = traci.trafficlight.getNextSwitch("J28") - traci.simulation.getTime()
-        else:
-            # Nếu đèn giao thông không phải là đèn đỏ, đặt lại red_light_time
-            red_light_time = None
-        
         step += 1
         
     traci.close()
