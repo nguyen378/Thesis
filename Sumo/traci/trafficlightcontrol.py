@@ -3,12 +3,45 @@ import traci
 class TrafficLightControl:
     def __init__(self, trafficlight_id):
         self.trafficlight_id = trafficlight_id
+        self.vehicle_entry_times = {}   
         self.phase_vehicle_counts = {}     
 
     def calculate_waiting_time(self):
-        """Calculate the waiting time for a specific traffic light."""
-        waiting_time = sum(traci.lane.getWaitingTime(lane) for lane in traci.trafficlight.getControlledLanes(self.trafficlight_id))
-        return waiting_time     
+        """Calculate the waiting time for a specific traffic light by summing up the waiting times of all controlled lanes."""
+        # Fetch all lanes controlled by the traffic light
+        controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
+        
+        # Calculate total waiting time by summing the waiting time of each lane
+        total_waiting_time = 0
+        for lane in controlled_lanes:
+            lane_waiting_time = traci.lane.getWaitingTime(lane)
+            total_waiting_time += lane_waiting_time
+            # Optionally, log waiting time for each lane if needed for debug or analysis
+            # print(f"Lane {lane}: Waiting Time = {lane_waiting_time}s")
+        
+        return total_waiting_time
+
+    def calculate_travel_time(self):
+        """Calculate the total travel time through the junction for vehicles."""
+        travel_times = []
+        controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
+        
+        for lane in controlled_lanes:
+            vehicles = traci.lane.getLastStepVehicleIDs(lane)
+            for vehicle in vehicles:
+                if vehicle not in self.vehicle_entry_times:
+                    # Record the entry time of the vehicle into the junction area
+                    self.vehicle_entry_times[vehicle] = traci.simulation.getTime()
+                else:
+                    # Calculate travel time if the vehicle has exited the junction
+                    if traci.vehicle.getRoadID(vehicle) not in controlled_lanes:
+                        entry_time = self.vehicle_entry_times.pop(vehicle, None)
+                        if entry_time is not None:
+                            travel_time = traci.simulation.getTime() - entry_time
+                            travel_times.append(travel_time)
+        
+        total_travel_time = sum(travel_times)
+        return total_travel_time
     
     
     def create_phases(self, num_intersections, time_1, time_2, time_3=None, time_4=None, time_5=None):
