@@ -136,7 +136,6 @@ class TrafficLightControl:
         # Retrieve the number of vehicles that have passed during the green phase
         lane_id = traci.trafficlight.getControlledLanes(self.trafficlight_id)[current_phase]
         vehicles = traci.lane.getLastStepVehicleNumber(lane_id)
-        print("Lane id: ", lane_id, "Vehicle: ", vehicles)
         self.phase_vehicle_counts[current_phase] += vehicles
 
     def calculate_y_crit(self, sat_flow):
