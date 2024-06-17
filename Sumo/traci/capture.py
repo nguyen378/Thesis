@@ -10,7 +10,7 @@ class Capture:
         self.region = (400, 130, 1450, 980)
     
     def capture_screen(self):
-        hwnd = win32gui.FindWindow(None, "new.sumocfg - SUMO 1.19.0")  # Adjust as necessary
+        hwnd = win32gui.FindWindow(None, "new.sumocfg - SUMO 1.20.0")  # Adjust as necessary
         if hwnd:
             # Uncomment the following line if you use a high DPI display or >100% scaling size
             windll.user32.SetProcessDPIAware()
@@ -28,7 +28,7 @@ class Capture:
 
             saveDC.SelectObject(saveBitMap)
 
-            result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 0)
+            result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 3)
 
             bmpinfo = saveBitMap.GetInfo()
             bmpstr = saveBitMap.GetBitmapBits(True)
@@ -47,6 +47,7 @@ class Capture:
                 # Crop the image to the region
                 x_start, y_start, x_end, y_end = self.region
                 image = image.crop((x_start - left, y_start - top, x_end - left, y_end - top))
+                image.save('nga7.png')
                 return image
     
     def capture_road3T(self, image):
@@ -90,69 +91,31 @@ class Capture:
         W_road_image = image.crop(regionW)
         return X_road_image, Y_road_image, Z_road_image, W_road_image
     
-    def capture_road6(self, image):
-        width, height = image.size
-        # nga6
-        regionX = (0, height // 2.5, width, 2 * height // 3.25)
-        regionY = (width // 2.50, 0, 2 * width // 3.5, height)
-        left_road_image = image.crop(regionX)
-        right_road_image = image.crop(regionY)
-        return left_road_image, right_road_image
-    
-        mask_1, mask_2, mask_3 = self.create_shape_masks_6((width, height))
-        
-        # Áp dụng từng mặt nạ lên ảnh
-        image_1 = self.apply_mask(image, mask_1)
-        image_2 = self.apply_mask(image, mask_2)
-        image_3 = self.apply_mask(image, mask_3)
-        return image_1, image_2, image_3
-    
-    def capture_road7(self, image):
-        width, height = image.size
-        # nga7
-        regionX = (0, height // 2.5, width, 2 * height // 3.25)
-        regionY = (width // 2.50, 0, 2 * width // 3.5, height)
-        left_road_image = image.crop(regionX)
-        right_road_image = image.crop(regionY)
-        return left_road_image, right_road_image
-
-        mask_1, mask_3, mask_2, mask_4 = self.create_shape_masks_7((width, height))
-        
-        # Áp dụng từng mặt nạ lên ảnh
-        image_1 = self.apply_mask(image, mask_1)
-        image_3 = self.apply_mask(image, mask_3)
-        image_2 = self.apply_mask(image, mask_2)
-        image_4 = self.apply_mask(image, mask_4)
-        return image_1, image_3, image_2, image_4
-
-    def create_shape_masks_6(size, thickness=200):
-        """Tạo các mặt nạ cho từng phần của hình chữ Y."""
+    def create_shape_masks_6(self,size, thickness=200):
+ 
         width, height = size
         middle_x = width // 2
 
-        # Tạo mặt nạ cho thân Y
         mask_body = Image.new('L', size, 0)
         draw = ImageDraw.Draw(mask_body)
         draw.line([(middle_x, 0), (middle_x, height)], fill=255, width=thickness)
 
-        # Tạo mặt nạ cho nhánh trái Y
         mask_left = Image.new('L', size, 0)
         draw = ImageDraw.Draw(mask_left)
         draw.line([(width, height //7 ), (0, height -150)], fill=255, width=thickness)
 
-        # Tạo mặt nạ cho nhánh phải Y
         mask_right = Image.new('L', size, 0)
         draw = ImageDraw.Draw(mask_right)
         draw.line([(-width, -height +400 ), (width, height -125)], fill=255, width=thickness)
 
         return mask_body, mask_left, mask_right
 
-    def apply_mask(image, mask):
+    def apply_mask(self,image, mask):
         """Áp dụng mặt nạ lên ảnh."""
         result = Image.new("RGBA", image.size)
         result.paste(image, mask=mask)
         return result
-    def create_shape_masks_7(size, thickness=200):
+    def create_shape_masks_7(self, size, thickness=200):
         """Tạo các mặt nạ cho từng phần của hình chữ Y."""
         width, height = size
         middle_x = width // 2
@@ -180,3 +143,28 @@ class Capture:
         draw.line([(0, 100), (width//2, height//2)], fill=255, width=thickness)
 
         return mask_1, mask_3, mask_2, mask_4
+    
+    def capture_road6(self, image):
+        width, height = image.size
+        # nga6
+        mask_1, mask_2, mask_3 = self.create_shape_masks_6((width, height))
+        
+        # Áp dụng từng mặt nạ lên ảnh
+        image_1 = self.apply_mask(image, mask_1)
+        image_2 = self.apply_mask(image, mask_2)
+        image_3 = self.apply_mask(image, mask_3)
+        return image_1, image_2, image_3
+    
+    def capture_road7(self, image):
+        width, height = image.size
+        # nga7
+
+        mask_1, mask_3, mask_2, mask_4 = self.create_shape_masks_7((width, height))
+        
+        # Áp dụng từng mặt nạ lên ảnh
+        image_1 = self.apply_mask(image, mask_1)
+        image_3 = self.apply_mask(image, mask_3)
+        image_2 = self.apply_mask(image, mask_2)
+        image_4 = self.apply_mask(image, mask_4)
+        return image_1, image_3, image_2, image_4
+

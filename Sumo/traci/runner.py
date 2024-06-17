@@ -80,7 +80,7 @@ def run():
     last_phase = -1
     dt = Detect()
     cp = Capture()
-    tlc = TrafficLightControl("J28") #J28 = 3, J15 = 4, J49 = 5, J8 = 6, J40 = 7
+    tlc = TrafficLightControl("J40") #J28 = 3, J15 = 4, J49 = 5, J8 = 6, J40 = 7
     num_ways = get_edge(tlc) / 4
     sat_flow = 1800  # Saturation flow rate in vehicles per hour | Default = 1800
     L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
@@ -146,7 +146,7 @@ def run():
                 print("Total time: ",total_time, "y_crit_value: ", y_crit_value)
                 
 
-                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_road_image, vertical_road_image = cp.capture_road4(screen)
                 horizontal_result = dt.predict( horizontal_road_image)
                 vertical_result = dt.predict( vertical_road_image)
                 horizontal_weight = dt.calculate_weight(horizontal_result)

@@ -107,7 +107,7 @@ class TrafficLightControl:
             traci.trafficlight.Phase(3, "rrrrrrryyyyyggrrrrrrrrrrrrrrryyyygggrrrrrrrrrrrrrr"),  
             traci.trafficlight.Phase(6, "rrrrrrrrrrrrGGrrrrrrrrrrrrrrrrrrrGGGrrrrrrrrrrrrrr"),
             traci.trafficlight.Phase(3, "rrrrrrrrrrrryyrrrrrrrrrrrrrrrrrrryyyrrrrrrrrrrrrrr"),  
-            traci.trafficlight.Phase(time_2, "GrrrGGGGGggrrrrrrrrrrrrrrrGGGGgggrrrrrrrrrrrrrrrrrrrrrrrGGrrrrrGGGrrrrr"),  
+            traci.trafficlight.Phase(time_2, "GGGGGggrrrrrrrrrrrrrrrGGGGgggrrrrrrrrrrrrrrrrrrrrr"),  
             traci.trafficlight.Phase(3, "yyyyyggrrrrrrrrrrrrrrryyyygggrrrrrrrrrrrrrrrrrrrrr"),  
             traci.trafficlight.Phase(6, "rrrrrGGrrrrrrrrrrrrrrrrrrrGGGrrrrrrrrrrrrrrrrrrrrr"),  
             traci.trafficlight.Phase(3, "rrrrryyrrrrrrrrrrrrrrrrrrryyyrrrrrrrrrrrrrrrrrrrrr"),    
@@ -115,7 +115,7 @@ class TrafficLightControl:
             traci.trafficlight.Phase(3, "rrrrrrrrrrrrrryyyyggggrrrrrrrrrrrrrrrrrrrrrgggyygg"),  
             traci.trafficlight.Phase(6, "rrrrrrrrrrrrrrrrrrGGggrrrrrrrrrrrrrrrrrrrrrgggrrGG"),  
             traci.trafficlight.Phase(3 , "rrrrrrrrrrrrrrrrrryyyyrrrrrrrrrrrrrrrrrrrrrgyyrryy"),
-            traci.trafficlight.Phase(time_4, "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrGGGGGGGGrrrrrr"),
+            traci.trafficlight.Phase(time_4, "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrGGGGGGGrrrrrrr"),
             traci.trafficlight.Phase(3, "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrryyyyyyyyrrrrrr")
     
         ]
