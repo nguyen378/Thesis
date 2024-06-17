@@ -3,39 +3,14 @@ import traci
 class TrafficLightControl:
     def __init__(self, trafficlight_id):
         self.trafficlight_id = trafficlight_id
-        self.phase_vehicle_counts = {}
-    def update_traffic_light(self, trafficlight_id, time_1, time_2, time_3=None, time_4=None, time_5=None):
-        tlc = TrafficLightControl(trafficlight_id)
-        current_phase = traci.trafficlight.getPhase(trafficlight_id)
-        if red_light_time == 2:
-            print("Chup hinh doi pha")
-            # phân loại mật độ giao thông
-            screen = cp.capture_screen()
-            result = dt.predict(screen)
-            weight = dt.calculate_weight(result)
-            if weight == 0:
-                weight = 1
-            
-            if(weight < 12):
-                c_min = 20  # Minimum cycle length in seconds
-                c_max = 32*2  # Maximum cycle length in seconds
-                print('vang')
-            elif (weight <30):
-                c_min = 20
-                c_max = 45*2 
-                print('it')
-            else:
-                c_min = 20
-                c_max = 60*2 
-                print('dong')
+        self.phase_vehicle_counts = {}     
 
-            # Calculate y_crit using the updated vehicle counts
-            sat_flow = 1500  # Saturation flow rate in vehicles per hour | Default = 1800
-            y_crit_value = [tlc.calculate_y_crit(sat_flow)]  # Consider using dynamic saturation flow values
-            L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
-            total_time = websters(y_crit_value, L, c_min, c_max, num_phases = 4)
-            print("Total time: ",total_time, "y_crit_value: ", y_crit_value)            
-            
+    def calculate_waiting_time(self):
+        """Calculate the waiting time for a specific traffic light."""
+        waiting_time = sum(traci.lane.getWaitingTime(lane) for lane in traci.trafficlight.getControlledLanes(self.trafficlight_id))
+        return waiting_time     
+    
+    
     def create_phases(self, num_intersections, time_1, time_2, time_3=None, time_4=None, time_5=None):
         if num_intersections == 3:
             return self.create_phases_3(time_1, time_2)
