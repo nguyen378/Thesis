@@ -228,7 +228,8 @@ def run():
                 phases =tlc.create_phases_7(time1, time2, time3, time4)
                 tlc.set_traffic_light_cycle( phases)
                     
-                print("Ngang:", str(horizontal_weight) +' time ngang:'+ str(time1), "Doc", str(vertical_weight) +' time doc:'+ str(time2))
+                print("Image 1:", str(image_1_weight) +' time 1:'+ str(time1), "Image 2", str(image_2_weight) +' time 2:'+ str(time2), "Image 3", str(image_3_weight) +' time 3:'+ str(time3), "Image 4", str(image_4_weight) +' time 4:'+ str(time4))
+
 
         if num_ways == 3 or num_ways == 4:
             if traci.trafficlight.getPhase(tlc.trafficlight_id) == 3:
