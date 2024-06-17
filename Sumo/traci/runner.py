@@ -76,6 +76,8 @@ def get_traffic_light_phases(tls_id):
 def run():
     """execute the TraCI control loop"""
     step = 0
+    total_waiting_time = 0
+    total_travel_time = 0
     red_light_time = None
     last_phase = -1
     dt = Detect()
@@ -264,7 +266,15 @@ def run():
             else:
                 # Nếu đèn giao thông không phải là đèn đỏ, đặt lại red_light_time
                 red_light_time = None
+        if (step >= 600 and step <= 3600):
+            total_travel_time += tlc.calculate_travel_time()
+            total_waiting_time += tlc.calculate_waiting_time()
 
+            average_waiting_time = total_waiting_time / step
+            average_travel_time = total_travel_time / step
+
+            print("Step: ", step, "Average waiting time: ", average_waiting_time)
+            print("Step: ", step, "Average travel time: ", average_travel_time)
         step += 1
         
     traci.close()

@@ -3,39 +3,47 @@ import traci
 class TrafficLightControl:
     def __init__(self, trafficlight_id):
         self.trafficlight_id = trafficlight_id
-        self.phase_vehicle_counts = {}
-    def update_traffic_light(self, trafficlight_id, time_1, time_2, time_3=None, time_4=None, time_5=None):
-        tlc = TrafficLightControl(trafficlight_id)
-        current_phase = traci.trafficlight.getPhase(trafficlight_id)
-        if red_light_time == 2:
-            print("Chup hinh doi pha")
-            # phân loại mật độ giao thông
-            screen = cp.capture_screen()
-            result = dt.predict(screen)
-            weight = dt.calculate_weight(result)
-            if weight == 0:
-                weight = 1
-            
-            if(weight < 12):
-                c_min = 20  # Minimum cycle length in seconds
-                c_max = 32*2  # Maximum cycle length in seconds
-                print('vang')
-            elif (weight <30):
-                c_min = 20
-                c_max = 45*2 
-                print('it')
-            else:
-                c_min = 20
-                c_max = 60*2 
-                print('dong')
+        self.vehicle_entry_times = {}   
+        self.phase_vehicle_counts = {}     
 
-            # Calculate y_crit using the updated vehicle counts
-            sat_flow = 1500  # Saturation flow rate in vehicles per hour | Default = 1800
-            y_crit_value = [tlc.calculate_y_crit(sat_flow)]  # Consider using dynamic saturation flow values
-            L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
-            total_time = websters(y_crit_value, L, c_min, c_max, num_phases = 4)
-            print("Total time: ",total_time, "y_crit_value: ", y_crit_value)            
-            
+    def calculate_waiting_time(self):
+        """Calculate the waiting time for a specific traffic light by summing up the waiting times of all controlled lanes."""
+        # Fetch all lanes controlled by the traffic light
+        controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
+        
+        # Calculate total waiting time by summing the waiting time of each lane
+        total_waiting_time = 0
+        for lane in controlled_lanes:
+            lane_waiting_time = traci.lane.getWaitingTime(lane)
+            total_waiting_time += lane_waiting_time
+            # Optionally, log waiting time for each lane if needed for debug or analysis
+            # print(f"Lane {lane}: Waiting Time = {lane_waiting_time}s")
+        
+        return total_waiting_time
+
+    def calculate_travel_time(self):
+        """Calculate the total travel time through the junction for vehicles."""
+        travel_times = []
+        controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
+        
+        for lane in controlled_lanes:
+            vehicles = traci.lane.getLastStepVehicleIDs(lane)
+            for vehicle in vehicles:
+                if vehicle not in self.vehicle_entry_times:
+                    # Record the entry time of the vehicle into the junction area
+                    self.vehicle_entry_times[vehicle] = traci.simulation.getTime()
+                else:
+                    # Calculate travel time if the vehicle has exited the junction
+                    if traci.vehicle.getRoadID(vehicle) not in controlled_lanes:
+                        entry_time = self.vehicle_entry_times.pop(vehicle, None)
+                        if entry_time is not None:
+                            travel_time = traci.simulation.getTime() - entry_time
+                            travel_times.append(travel_time)
+        
+        total_travel_time = sum(travel_times)
+        return total_travel_time
+    
+    
     def create_phases(self, num_intersections, time_1, time_2, time_3=None, time_4=None, time_5=None):
         if num_intersections == 3:
             return self.create_phases_3(time_1, time_2)
