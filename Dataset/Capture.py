@@ -13,7 +13,7 @@ def save_screenshot(img, folder, filename):
 def main():
     # Define the region to capture (left, top, right, bottom)
     region = (400, 130, 1450, 980)
-
+    
     # Capture and save screenshots every 10 seconds
     while True:
         current_time = time.strftime("%Y%m%d_%H%M%S")
