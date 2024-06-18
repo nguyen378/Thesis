@@ -21,28 +21,6 @@ class TrafficLightControl:
         
         return total_waiting_time
 
-    def calculate_travel_time(self):
-        """Calculate the total travel time through the junction for vehicles."""
-        travel_times = []
-        controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
-        
-        for lane in controlled_lanes:
-            vehicles = traci.lane.getLastStepVehicleIDs(lane)
-            for vehicle in vehicles:
-                if vehicle not in self.vehicle_entry_times:
-                    # Record the entry time of the vehicle into the junction area
-                    self.vehicle_entry_times[vehicle] = traci.simulation.getTime()
-                else:
-                    # Calculate travel time if the vehicle has exited the junction
-                    if traci.vehicle.getRoadID(vehicle) not in controlled_lanes:
-                        entry_time = self.vehicle_entry_times.pop(vehicle, None)
-                        if entry_time is not None:
-                            travel_time = traci.simulation.getTime() - entry_time
-                            travel_times.append(travel_time)
-        
-        total_travel_time = sum(travel_times)
-        return total_travel_time
-    
     
     def create_phases(self, num_intersections, time_1, time_2, time_3=None, time_4=None, time_5=None):
         if num_intersections == 3:
@@ -70,7 +48,7 @@ class TrafficLightControl:
     def create_phases_4(self, time_1, time_2):
         # Tạo chu kỳ đèn giao thông mới của ngã 4
         phases = [
-            traci.trafficlight.Phase(time_1, "rrrrGGGgrrrrGGGg", time_1, time_1, [1,2,3]),  # Green for first 4 lanes
+            traci.trafficlight.Phase(time_1, "rrrrGGGgrrrrGGGg", 0, 0, [1,2,3]),  # Green for first 4 lanes
             traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy"),  # Yellow for first 4 lanes
             traci.trafficlight.Phase(time_2, "GGGgrrrrGGGgrrrr"),  # Green for next 4 lanes
             traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr")    # Yellow for next 4 lanes
