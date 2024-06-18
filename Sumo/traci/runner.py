@@ -77,7 +77,6 @@ def run():
     """execute the TraCI control loop"""
     step = 0
     total_waiting_time = 0
-    total_travel_time = 0
     red_light_time = None
     last_phase = -1
     dt = Detect()
@@ -228,7 +227,7 @@ def run():
         #         phases =tlc.create_phases_7(time1, time2, time3, time4)
         #         tlc.set_traffic_light_cycle( phases)
                     
-        #         print("Image 1:", str(image_1_weight) +' time 1:'+ str(time1), "Image 2", str(image_2_weight) +' time 2:'+ str(time2), "Image 3", str(image_3_weight) +' time 3:'+ str(time3), "Image 4", str(image_4_weight) +' time 4:'+ str(time4))
+                print("Image 1:", str(image_1_weight) +' time 1:'+ str(time1), "Image 2", str(image_2_weight) +' time 2:'+ str(time2), "Image 3", str(image_3_weight) +' time 3:'+ str(time3), "Image 4", str(image_4_weight) +' time 4:'+ str(time4))
 
 
         # if num_ways == 3 or num_ways == 4:
@@ -269,9 +268,9 @@ def run():
         #         red_light_time = None
         if (step >= 600 and step <= 3600):
             total_travel_time += tlc.calculate_travel_time()
+            total_waiting_time += tlc.calculate_waiting_time()
 
             average_waiting_time = total_waiting_time / step
-            average_travel_time = total_travel_time / step
 
             print("Step: ", step, "Average waiting time: ", average_waiting_time)
         step += 1
