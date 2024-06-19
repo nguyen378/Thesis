@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2024-05-23 22:04:50.952096 by randomTrips.py v1_20_0+0002-343658e7c64
+<configuration>
+    <net-file value="F:\Project\Thesis\Thesis\Sumo\traci\new\new.net.xml"/>
+    <output-trip-file value="F:\Project\Thesis\Thesis\Sumo\traci\new\car.rou.xml"/>
+    <vtype-output value="F:\Project\Thesis\Thesis\Sumo\traci\new\vtype.xml"/>
+    <vehicle-class value="passenger"/>
+    <random value="True"/>
+</configuration>
+-->
+
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <vType id="passenger" vClass="passenger"/>
+</additional>

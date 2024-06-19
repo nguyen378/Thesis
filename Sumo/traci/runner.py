@@ -81,7 +81,7 @@ def run():
     last_phase = -1
     dt = Detect()
     cp = Capture()
-    tlc = TrafficLightControl("J15") #J28 = 3, J15 = 4, J49 = 5, J8 = 6, J40 = 7
+    tlc = TrafficLightControl("J28") #J28 = 3, J15 = 4, J49 = 5, J8 = 6, J40 = 7
     num_ways = get_edge(tlc) / 4
     sat_flow = 1800  # Saturation flow rate in vehicles per hour | Default = 1800
     L = 5  # Lost time (red + yellow) in seconds, adjust as necessary
@@ -227,7 +227,7 @@ def run():
         #         phases =tlc.create_phases_7(time1, time2, time3, time4)
         #         tlc.set_traffic_light_cycle( phases)
                     
-                print("Image 1:", str(image_1_weight) +' time 1:'+ str(time1), "Image 2", str(image_2_weight) +' time 2:'+ str(time2), "Image 3", str(image_3_weight) +' time 3:'+ str(time3), "Image 4", str(image_4_weight) +' time 4:'+ str(time4))
+        #         print("Image 1:", str(image_1_weight) +' time 1:'+ str(time1), "Image 2", str(image_2_weight) +' time 2:'+ str(time2), "Image 3", str(image_3_weight) +' time 3:'+ str(time3), "Image 4", str(image_4_weight) +' time 4:'+ str(time4))
 
 
         # if num_ways == 3 or num_ways == 4:
