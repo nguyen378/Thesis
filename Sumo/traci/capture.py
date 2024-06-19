@@ -47,7 +47,7 @@ class Capture:
                 # Crop the image to the region
                 x_start, y_start, x_end, y_end = self.region
                 image = image.crop((x_start - left, y_start - top, x_end - left, y_end - top))
-                image.save('nga7.png')
+                image.save('nga.png')
                 return image
     
     def capture_road3T(self, image):
@@ -58,6 +58,8 @@ class Capture:
         # Cắt hình ảnh 
         horizontal_road_image = image.crop(horizontal_road_region)
         vertical_road_image = image.crop(vertical_road_region)
+        horizontal_road_image.save('image\\nga3T1.png')
+        vertical_road_image.save('image\\nga3T2.png')
         return horizontal_road_image, vertical_road_image
     
     def capture_road3Y(self, image):
