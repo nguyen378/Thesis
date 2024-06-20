@@ -1,7 +1,6 @@
 import os
 import sys
 import optparse
-import random
 
 
 from capture import Capture 
@@ -19,7 +18,6 @@ else:
 from sumolib import checkBinary  # noqa
 import traci  # noqa
 
-import time
 from PIL import ImageGrab
 
 def websters(y_crit, L, c_min, c_max, num_phases):
@@ -162,14 +160,14 @@ def run(lane_number):
                 print("Total time: ",total_time, "y_crit_value: ", y_crit_value)
                 
 
-                horizontal_road_image, vertical_road_image = cp.capture_road3T(screen)
+                horizontal_road_image, vertical_road_image = cp.capture_road4(screen)
                 horizontal_result = dt.predict( horizontal_road_image)
                 vertical_result = dt.predict( vertical_road_image)
                 horizontal_weight = dt.calculate_weight(horizontal_result)
                 vertical_weight = dt.calculate_weight(vertical_result)
                 
-                time1 = round((horizontal_weight /weight) * total_time)
-                time2 = round((vertical_weight /weight) * total_time)
+                time2 = round((horizontal_weight /weight) * total_time)
+                time1 = round((vertical_weight /weight) * total_time)
                 phases = tlc.create_phases_4(time1, time2)
                 tlc.set_traffic_light_cycle( phases)
 
@@ -327,7 +325,7 @@ if __name__ == "__main__":
         sumoBinary = checkBinary('sumo')
     else:
         sumoBinary = checkBinary('sumo-gui')
-    lane_number = 3
+    lane_number = 7
     path_road = get_path_road(lane_number)
     traci.start([sumoBinary, "-c", path_road])
     run(lane_number)

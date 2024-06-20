@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-06-20 03:02:36 by Eclipse SUMO netedit Version 1.20.0
+<!-- generated on 2024-06-20 06:58:20 by Eclipse SUMO netedit Version 1.20.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/neteditConfiguration.xsd">
 
     <input>
         <sumocfg-file value="F:\Project\Thesis\Thesis\Sumo\traci\map7\map7.sumocfg"/>
-        <additional-files value=""/>
         <route-files value="F:\Project\Thesis\Thesis\Sumo\traci\map7\trips.xml"/>
         <sumo-net-file value="F:\Project\Thesis\Thesis\Sumo\traci\map7\map7.net.xml"/>
     </input>
@@ -31,10 +30,6 @@
     <pedestrian>
         <walkingareas value="0"/>
     </pedestrian>
-
-    <netedit>
-        <ignore.routeelements value="false"/>
-    </netedit>
 
 </configuration>
 -->
@@ -574,7 +569,6 @@
         <phase duration="3"  state="rrrrrrrrrrrrrrrrrrrrryyyyyggrrrrrrrrrrrrrrryyyyggg"/>
         <phase duration="6"  state="rrrrrrrrrrrrrrrrrrrrrrrrrrGGrrrrrrrrrrrrrrrrrrrGGG"/>
         <phase duration="3"  state="rrrrrrrrrrrrrrrrrrrrrrrrrryyrrrrrrrrrrrrrrrrrrryyy"/>
-        <phase duration="3"  state="rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"/>
         <phase duration="32" state="rrrrrrrrrrrrrrGGGGGggrrrrrrrrrrrrrrrGGGGgggrrrrrrr"/>
         <phase duration="3"  state="rrrrrrrrrrrrrryyyyyggrrrrrrrrrrrrrrryyyygggrrrrrrr"/>
         <phase duration="6"  state="rrrrrrrrrrrrrrrrrrrGGrrrrrrrrrrrrrrrrrrrGGGrrrrrrr"/>
