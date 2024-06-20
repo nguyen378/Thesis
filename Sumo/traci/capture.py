@@ -8,7 +8,7 @@ class Capture:
         self.region = (300, 100, 1450, 900)
     
     def capture_screen(self):
-        hwnd = win32gui.FindWindow(None, "map7.sumocfg - SUMO 1.20.0")  # Adjust as necessary
+        hwnd = win32gui.FindWindow(None, "map3.sumocfg - SUMO 1.20.0")  # Adjust as necessary
         if hwnd:
             # Uncomment the following line if you use a high DPI display or >100% scaling size
             windll.user32.SetProcessDPIAware()

@@ -325,7 +325,7 @@ if __name__ == "__main__":
         sumoBinary = checkBinary('sumo')
     else:
         sumoBinary = checkBinary('sumo-gui')
-    lane_number = 7
+    lane_number = 3
     path_road = get_path_road(lane_number)
     traci.start([sumoBinary, "-c", path_road])
     run(lane_number)
