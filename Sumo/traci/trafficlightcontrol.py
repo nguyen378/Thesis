@@ -7,43 +7,21 @@ class TrafficLightControl:
         self.phase_vehicle_counts = {}     
 
     def calculate_waiting_time(self):
-        """Calculate the waiting time for a specific traffic light by summing up the waiting times of all controlled lanes."""
-        # Fetch all lanes controlled by the traffic light
+        """Tính thời gian chờ đợi cho một đèn giao thông cụ thể bằng cách cộng thời gian chờ đợi của tất cả các làn đường được điều khiển."""
+        # Lấy tất cả các làn đường được điều khiển bởi đèn giao thông
         controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
         
-        # Calculate total waiting time by summing the waiting time of each lane
+        # Tính tổng thời gian chờ đợi bằng cách cộng thời gian chờ đợi của từng làn đường
         total_waiting_time = 0
         for lane in controlled_lanes:
             lane_waiting_time = traci.lane.getWaitingTime(lane)
             total_waiting_time += lane_waiting_time
-            # Optionally, log waiting time for each lane if needed for debug or analysis
             # print(f"Lane {lane}: Waiting Time = {lane_waiting_time}s")
         
         return total_waiting_time
-
-    def calculate_travel_time(self):
-        """Calculate the total travel time through the junction for vehicles."""
-        travel_times = []
-        controlled_lanes = traci.trafficlight.getControlledLanes(self.trafficlight_id)
-        
-        for lane in controlled_lanes:
-            vehicles = traci.lane.getLastStepVehicleIDs(lane)
-            for vehicle in vehicles:
-                if vehicle not in self.vehicle_entry_times:
-                    # Record the entry time of the vehicle into the junction area
-                    self.vehicle_entry_times[vehicle] = traci.simulation.getTime()
-                else:
-                    # Calculate travel time if the vehicle has exited the junction
-                    if traci.vehicle.getRoadID(vehicle) not in controlled_lanes:
-                        entry_time = self.vehicle_entry_times.pop(vehicle, None)
-                        if entry_time is not None:
-                            travel_time = traci.simulation.getTime() - entry_time
-                            travel_times.append(travel_time)
-        
-        total_travel_time = sum(travel_times)
-        return total_travel_time
     
     def create_phases(self, num_intersections, time_1, time_2, time_3=None, time_4=None, time_5=None):
+        # Tạo chu kỳ đèn giao thông mới cho số lượng ngã giao khác nhau
         if num_intersections == 3:
             return self.create_phases_3(time_1, time_2)
         elif num_intersections == 4:
@@ -60,19 +38,26 @@ class TrafficLightControl:
     def create_phases_3(self, time_1, time_2):
         # Tạo chu kỳ đèn giao thông mới của ngã 3
         phases = [
-            traci.trafficlight.Phase(time_1, "rrGGGGGg", time_1, time_1, [1,2,3]),  # Green for first 3 lanes
-            traci.trafficlight.Phase(3, "rrryyyyy"),  # Yellow for first 3 lanes
-            traci.trafficlight.Phase(time_2, "GGrrrrrr"),  # Green for next 3 lanes
-            traci.trafficlight.Phase(3, "yyrrrrrr")    # Yellow for next 3 lanes
+            traci.trafficlight.Phase(time_1, "rrGGGGGg", time_1, time_1, [1,2,3]),  # Xanh cho 3 làn đầu tiên
+            traci.trafficlight.Phase(3, "rrryyyyy"),  # Vàng cho 3 làn đầu tiên
+            traci.trafficlight.Phase(time_2, "GGrrrrrr"),  # Xanh cho 3 làn tiếp theo
+            traci.trafficlight.Phase(3, "yyrrrrrr")    # Vàng cho 3 làn tiếp theo
         ]
         return phases
     def create_phases_4(self, time_1, time_2):
         # Tạo chu kỳ đèn giao thông mới của ngã 4
         phases = [
+<<<<<<< Updated upstream
             traci.trafficlight.Phase(time_1, "GGGgrrrrGGGgrrrr"),
             traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr"), 
             traci.trafficlight.Phase(time_2, "rrrrGGGgrrrrGGGg"), 
             traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy") 
+=======
+            traci.trafficlight.Phase(time_1, "GGGgrrrrGGGgrrrr", 0, 0, [1,2,3]),  # Xanh cho 4 làn đầu tiên
+            traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr"),  # Vàng cho 4 làn đầu tiên
+            traci.trafficlight.Phase(time_2, "rrrrGGGgrrrrGGGg"),  # Xanh cho 4 làn tiếp theo
+            traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy")    # Vàng cho 4 làn tiếp theo
+>>>>>>> Stashed changes
         ]
         return phases
     def create_phases_5(self, time_1, time_2, time_3, time_4):
@@ -135,20 +120,19 @@ class TrafficLightControl:
         traci.trafficlight.setProgramLogic(self.trafficlight_id, program)
         traci.trafficlight.setPhase(self.trafficlight_id, 0)
 
-        
     def update_vehicle_counts(self, current_phase):
-        """Update vehicle counts for the current green phase."""
+        """Cập nhật số lượng phương tiện cho giai đoạn xanh hiện tại."""
         if current_phase not in self.phase_vehicle_counts:
             self.phase_vehicle_counts[current_phase] = 0
-        # Retrieve the number of vehicles that have passed during the green phase
+        # Lấy số lượng phương tiện đã đi qua trong giai đoạn xanh
         lane_id = traci.trafficlight.getControlledLanes(self.trafficlight_id)[current_phase]
         vehicles = traci.lane.getLastStepVehicleNumber(lane_id)
         self.phase_vehicle_counts[current_phase] += vehicles
 
     def calculate_y_crit(self, sat_flow):
-        """Calculate y_crit using collected vehicle counts and saturation flow rate."""
+        """Tính toán y_crit sử dụng số lượng phương tiện đã thu thập và tỷ lệ dòng chảy bão hòa."""
         y_crit = []
         for _, count in self.phase_vehicle_counts.items():
             flow_ratio = count / sat_flow
             y_crit.append(flow_ratio)
-        return max(y_crit) if y_crit else 0.01  # Avoid division by zero in Webster's formula
+        return max(y_crit) if y_crit else 0.01  # Tránh chia cho 0 trong công thức Webster
