@@ -247,6 +247,8 @@ def run(lane_number):
                 # Nếu đèn giao thông là đèn đỏ
                 if red_light_time is None or red_light_time > 2:
                     print(traci.trafficlight.getNextSwitch(tlc.trafficlight_id) - traci.simulation.getTime())
+                    print( "Next switch: ", traci.trafficlight.getNextSwitch(tlc.trafficlight_id))
+                    print( "Current time: ", traci.simulation.getTime())
                     red_light_time = traci.trafficlight.getNextSwitch(tlc.trafficlight_id) - traci.simulation.getTime()
             else:
                 # Nếu đèn giao thông không phải là đèn đỏ, đặt lại red_light_time

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-06-20 16:53:51 by Eclipse SUMO netedit Version 1.20.0
+<!-- generated on 2024-07-03 11:40:24 by Eclipse SUMO netedit Version 1.20.0
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/neteditConfiguration.xsd">
 
     <input>
         <sumocfg-file value="F:\Project\Thesis\Thesis\Sumo\traci\map3\map3.sumocfg"/>
+        <additional-files value=""/>
         <route-files value="F:\Project\Thesis\Thesis\Sumo\traci\map3\trips.trips.xml"/>
         <sumo-net-file value="F:\Project\Thesis\Thesis\Sumo\traci\map3\map3.net.xml"/>
     </input>
@@ -30,6 +31,10 @@
     <pedestrian>
         <walkingareas value="0"/>
     </pedestrian>
+
+    <netedit>
+        <ignore.routeelements value="false"/>
+    </netedit>
 
 </configuration>
 -->
@@ -176,7 +181,7 @@
 
     <tlLogic id="J7" type="static" programID="0" offset="0">
         <phase duration="32" state="rrGGGGGg"/>
-        <phase duration="3"  state="rrryyyyy"/>
+        <phase duration="3"  state="rryyyyyy"/>
         <phase duration="32" state="GGrrrrrr"/>
         <phase duration="3"  state="yyrrrrrr"/>
     </tlLogic>
