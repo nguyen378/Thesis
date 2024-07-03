@@ -47,17 +47,10 @@ class TrafficLightControl:
     def create_phases_4(self, time_1, time_2):
         # Tạo chu kỳ đèn giao thông mới của ngã 4
         phases = [
-<<<<<<< Updated upstream
-            traci.trafficlight.Phase(time_1, "GGGgrrrrGGGgrrrr"),
-            traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr"), 
-            traci.trafficlight.Phase(time_2, "rrrrGGGgrrrrGGGg"), 
-            traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy") 
-=======
             traci.trafficlight.Phase(time_1, "GGGgrrrrGGGgrrrr", 0, 0, [1,2,3]),  # Xanh cho 4 làn đầu tiên
             traci.trafficlight.Phase(3, "yyyyrrrryyyyrrrr"),  # Vàng cho 4 làn đầu tiên
             traci.trafficlight.Phase(time_2, "rrrrGGGgrrrrGGGg"),  # Xanh cho 4 làn tiếp theo
             traci.trafficlight.Phase(3, "rrrryyyyrrrryyyy")    # Vàng cho 4 làn tiếp theo
->>>>>>> Stashed changes
         ]
         return phases
     def create_phases_5(self, time_1, time_2, time_3, time_4):
@@ -115,19 +108,10 @@ class TrafficLightControl:
     
     def set_traffic_light_cycle(self, phases):
         """Thiết lập chu kỳ đèn giao thông mới cho nút giao được xác định bởi tls_id."""
-        # Thiết lập kế hoạch đèn giao thông (program)
+        # Thiết lập chu kỳ đèn vào đèn giao thông (program)
         program = traci.trafficlight.Logic("custom_program", 0, 0, phases)
         traci.trafficlight.setProgramLogic(self.trafficlight_id, program)
         traci.trafficlight.setPhase(self.trafficlight_id, 0)
-
-    def update_vehicle_counts(self, current_phase):
-        """Cập nhật số lượng phương tiện cho giai đoạn xanh hiện tại."""
-        if current_phase not in self.phase_vehicle_counts:
-            self.phase_vehicle_counts[current_phase] = 0
-        # Lấy số lượng phương tiện đã đi qua trong giai đoạn xanh
-        lane_id = traci.trafficlight.getControlledLanes(self.trafficlight_id)[current_phase]
-        vehicles = traci.lane.getLastStepVehicleNumber(lane_id)
-        self.phase_vehicle_counts[current_phase] += vehicles
 
     def calculate_y_crit(self, sat_flow):
         """Tính toán y_crit sử dụng số lượng phương tiện đã thu thập và tỷ lệ dòng chảy bão hòa."""
@@ -136,3 +120,4 @@ class TrafficLightControl:
             flow_ratio = count / sat_flow
             y_crit.append(flow_ratio)
         return max(y_crit) if y_crit else 0.01  # Tránh chia cho 0 trong công thức Webster
+
