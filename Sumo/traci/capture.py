@@ -8,9 +8,8 @@ class Capture:
         self.region = (300, 100, 1450, 900)
     
     def capture_screen(self):
-        hwnd = win32gui.FindWindow(None, "map3.sumocfg - SUMO 1.20.0")  # Adjust as necessary
+        hwnd = win32gui.FindWindow(None, "map4.sumocfg - SUMO 1.19.0")  # Chỉnh sửa theo tên cửa sổ ứng dụng
         if hwnd:
-            # Uncomment the following line if you use a high DPI display or >100% scaling size
             windll.user32.SetProcessDPIAware()
 
             left, top, right, bot = win32gui.GetWindowRect(hwnd)
@@ -25,8 +24,6 @@ class Capture:
             saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
 
             saveDC.SelectObject(saveBitMap)
-
-            # PrintWindow flags: 0 for the client area, 1 for the entire window
             result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 3)
 
             # Check if PrintWindow succeeded
@@ -79,7 +76,6 @@ class Capture:
     
     def capture_road4(self, image):
         width, height = image.size
-        # nga4
         regionX = (0, height // 2.5, width, 2 * height // 3.25)
         regionY = (width // 2.50, 0, 2 * width // 3.5, height)
         left_road_image = image.crop(regionX)

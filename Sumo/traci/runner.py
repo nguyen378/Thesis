@@ -104,13 +104,8 @@ def run(lane_number):
         current_phase = traci.trafficlight.getPhase(tlc.trafficlight_id)
         num_phases = get_traffic_light_phases(tlc.trafficlight_id)  # Lấy số lượng giai đoạn
 
+        # Kiểm tra nếu current_phase giống phase trước
         if current_phase != last_phase:
-            # Kiểm tra nếu current_phase là giai đoạn cuối cùng
-            if current_phase == num_phases - 1:
-                # Xử lý đặc biệt cho giai đoạn cuối cùng
-                pass  # Thêm logic xử lý ở đây nếu cần
-            else:
-                tlc.update_vehicle_counts(current_phase)
             last_phase = current_phase
 
         if red_light_time == 2:
@@ -327,7 +322,7 @@ if __name__ == "__main__":
         sumoBinary = checkBinary('sumo')
     else:
         sumoBinary = checkBinary('sumo-gui')
-    lane_number = 3
+    lane_number = 4
     path_road = get_path_road(lane_number)
     traci.start([sumoBinary, "-c", path_road])
     run(lane_number)
