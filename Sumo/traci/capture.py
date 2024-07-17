@@ -8,28 +8,25 @@ class Capture:
         self.region = (300, 100, 1450, 900)
     
     def capture_screen(self):
-        hwnd = win32gui.FindWindow(None, "map4.sumocfg - SUMO 1.19.0")  # Chỉnh sửa theo tên cửa sổ ứng dụng
+        hwnd = win32gui.FindWindow(None, "map5 .sumocfg - SUMO 1.20.0")  # Adjust as necessary
         if hwnd:
+            # Uncomment the following line if you use a high DPI display or >100% scaling size
             windll.user32.SetProcessDPIAware()
 
-            # Lấy kích thước cửa sổ
             left, top, right, bot = win32gui.GetWindowRect(hwnd)
             w = right - left
             h = bot - top
 
-            # Lấy ảnh từ cửa sổ
             hwndDC = win32gui.GetWindowDC(hwnd)
             mfcDC = win32ui.CreateDCFromHandle(hwndDC)
             saveDC = mfcDC.CreateCompatibleDC()
 
-            # Tạo bitmap để lưu ảnh
             saveBitMap = win32ui.CreateBitmap()
             saveBitMap.CreateCompatibleBitmap(mfcDC, w, h)
 
-            # Copy ảnh vào bitmap
             saveDC.SelectObject(saveBitMap)
 
-            # Trả về ảnh lấy từ cửa sổ
+            # PrintWindow flags: 0 for the client area, 1 for the entire window
             result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 3)
 
             # Check if PrintWindow succeeded
@@ -73,7 +70,7 @@ class Capture:
     
     def capture_road3Y(self, image):
         width, height = image.size
-        # Xác định các vùng để cắt
+        # nga3Y
         regionX = (0, 0, width // 2 + width // 13, height)
         regionY = (width // 2, 0, width, height // 2)
         left_road_image = image.crop(regionX)
@@ -82,11 +79,9 @@ class Capture:
     
     def capture_road4(self, image):
         width, height = image.size
-        # Xác định các vùng để cắt
+        # nga4
         regionX = (0, height // 2.5, width, 2 * height // 3.25)
         regionY = (width // 2.50, 0, 2 * width // 3.5, height)
-
-        # Cắt hình ảnh
         left_road_image = image.crop(regionX)
         right_road_image = image.crop(regionY)
         left_road_image.save('image\\nga4T1.png')
@@ -95,6 +90,7 @@ class Capture:
     
     def capture_road5(self, image):
         width, height = image.size
+        # nga5
         regionX = (0, height // 2.25, width, 2 * height // 2.70)
         regionY = (0, 0, 2 * width // 4, height // 2.25)
         regionZ = (width // 2, 0, 2 * width // 2, height // 2.25)
