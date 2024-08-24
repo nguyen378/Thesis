@@ -8,7 +8,7 @@ class Capture:
         self.region = (300, 100, 1450, 900)
     
     def capture_screen(self):
-        hwnd = win32gui.FindWindow(None, "map4.sumocfg - SUMO 1.19.0")  # Chỉnh sửa theo tên cửa sổ ứng dụng
+        hwnd = win32gui.FindWindow(None, "map7.sumocfg - SUMO 1.20.0")  # Chỉnh sửa theo tên cửa sổ ứng dụng
         if hwnd:
             windll.user32.SetProcessDPIAware()
 

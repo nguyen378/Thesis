@@ -120,4 +120,3 @@ class TrafficLightControl:
             flow_ratio = count / sat_flow
             y_crit.append(flow_ratio)
         return max(y_crit) if y_crit else 0.01  # Tránh chia cho 0 trong công thức Webster
-

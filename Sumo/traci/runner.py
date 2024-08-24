@@ -250,7 +250,6 @@ def run(lane_number):
                 red_light_time = None
 
         if (step >= 600 and step <= 3600):
-            total_travel_time += tlc.calculate_travel_time()
             average_waiting_time = total_waiting_time / step
 
             print("Step: ", step, "Average waiting time: ", average_waiting_time)
@@ -293,6 +292,7 @@ if __name__ == "__main__":
     else:
         sumoBinary = checkBinary('sumo-gui')
     lane_number = 4
+    lane_number = 7
     path_road = get_path_road(lane_number)
     traci.start([sumoBinary, "-c", path_road])
     run(lane_number)
